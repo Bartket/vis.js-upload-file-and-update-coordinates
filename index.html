@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<!-- saved from url=(0044)http://kenedict.com/networks/worldcup14/vis/ , thanks Andre!-->
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF8">
+  <title>Network Graph DEMO</title>
+  <script src="js/jquery.js"></script>
+  <script type="text/javascript" src="js/vis.js"></script>
+  <link type="text/css" rel="stylesheet" href="css/vis-network.min.css">
+  <link type="text/css" rel="stylesheet" href="css/bootstrap.css">
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <script type="text/javascript" src="js/FileName.js"></script>
+  <!-- script to pass file text -->
+</head>
+
+<body>
+  <div class="container">
+
+      <!-- Static navbar -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Network Graph DEMO</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+  <form id="jsonFile" name="jsonFile" enctype="multipart/form-data" method="post">
+
+  <fieldset>
+    <div class="input-group">
+               <label class="input-group-btn">
+                   <span class="btn btn-primary">
+                       Browse&hellip; <input type="file" id='fileinput' style="display: none;" multiple>
+                   </span>
+               </label>
+               <input type="text" class="form-control" readonly>
+           </div>
+           <div class="loader">
+             <button type="button" class="btn btn-primary" id='btnLoad' value='Load' onclick='loadFile();'>Load</button>
+           </div>
+           <div>
+               <input type="button" class="btn btn-primary" id="updater" value="update coordinates">
+           </div>
+  </fieldset>
+</form>
+  <div id="mynetwork"></div>
+<!-- Here enters the File Reader -->
+  <script type="text/javascript" src="js/script.js"></script>
+
+</body>
+</html>
