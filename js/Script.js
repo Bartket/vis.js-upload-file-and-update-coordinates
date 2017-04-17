@@ -21,7 +21,6 @@ var options = {
 var network = new vis.Network(container, data, options);
 
 // File Reader (parser)
-var nodes;
 function loadFile(receivedText) {
   var input, file, fr;
 
@@ -48,6 +47,9 @@ function loadFile(receivedText) {
   }
 
   function receivedText(e, exportNetwork) {
+	    _nodes.clear();
+  _edges.clear();
+  network = null;
     lines = e.target.result;
     var Network = JSON.parse(lines);
     _nodes.add(Network.nodes);
@@ -55,6 +57,12 @@ function loadFile(receivedText) {
     var nodes = Network.nodes;
     var edges = Network.edges;
     var new_nodes = Network.nodes;
+    var data = {
+      nodes: _nodes,
+      edges: _edges,
+    };
+    var network = new vis.Network(container, data, options);
+    console.log(edges)
     // So this is callback??!
     exportNetwork();
     function exportNetwork() {
@@ -105,7 +113,21 @@ function loadFile(receivedText) {
     					nodes: new_nodes,
     					edges: edges
     					};
-    					console.log(data)
+              console.log(data)
+              // Download updated JSON
+              var json = JSON.stringify(data);
+              // Use blob for big Networks
+              var blob = new Blob([json], {type: "application/json"});
+              var url  = URL.createObjectURL(blob);
+
+              var a = document.createElement('a');
+              a.download    = "Network.json";
+              a.href        = url;
+              a.textContent = "Download Network.json";
+              container.appendChild(a);
+  						// replace and append again after update
+  						document.getElementById('content').innerHTML = "";
+  						document.getElementById('content').appendChild(a);
                 function objectToArray(obj) {
                     return Object.keys(obj).map(function (key) { return obj[key]; });
                 }
