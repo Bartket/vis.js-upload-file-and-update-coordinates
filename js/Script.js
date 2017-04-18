@@ -15,10 +15,15 @@ var options = {
   },
   physics: false
 };
-
+      $(document).ready(function(){
+          $("#Storage_Cleaner").on("click", function(){
+			  localStorage.clear();
+              });
+              });
 	//Take data from local storage
 	var retrievedData = JSON.parse(localStorage.getItem("data_temp"));
 	console.log(retrievedData)
+	if (retrievedData != null) {
 	//Use to load Network from local storage
     var Network = retrievedData;
     _nodes.add(Network.nodes);
@@ -32,9 +37,14 @@ var options = {
     };
     var network = new vis.Network(container, data, options);
 // File Reader (parser)
-
+}
       $(document).ready(function(){
           $("#updater").on("click", function(){
+			  if (retrievedData == null) {
+			  alert("ERROR No data to save!");
+			  }else {
+				alert("Network Saved");
+			}
                   // track coordinates
             function addId(elem, index) {
                       elem.id = index;
@@ -81,7 +91,7 @@ var options = {
     					};
               console.log(data)
               // Use local storage to save Network
-			        localStorage.clear();
+			  localStorage.clear();
               localStorage.setItem('data_temp', JSON.stringify(data));
               // Download updated JSON
               var json = JSON.stringify(data);
@@ -106,8 +116,6 @@ function loadFile(receivedText) {
       //Clear Network to load new one without buttons
   _nodes.clear();
   _edges.clear();
-  network.destroy();
-  network = null;
 
 
   var input, file, fr;
