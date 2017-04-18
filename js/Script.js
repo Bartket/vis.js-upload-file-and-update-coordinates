@@ -6,10 +6,7 @@ var _nodes = new vis.DataSet();
 var _edges = new vis.DataSet();
 
 var container = document.getElementById('mynetwork');
-var data = {
-  nodes: _nodes,
-  edges: _edges,
-};
+
 var options = {
   autoResize: true,
   clickToUse: false,
@@ -18,40 +15,12 @@ var options = {
   },
   physics: false
 };
-var network = new vis.Network(container, data, options);
 
-// File Reader (parser)
-function loadFile(receivedText) {
-  var input, file, fr;
-
-  if (typeof window.FileReader !== 'function') {
-    alert("The file API isn't supported on this browser yet.");
-    return;
-  }
-
-  input = document.getElementById('fileinput');
-  if (!input) {
-    alert("Um, couldn't find the fileinput element.");
-  }
-  else if (!input.files) {
-    alert("This browser doesn't seem to support the `files` property of file inputs.");
-  }
-  else if (!input.files[0]) {
-    alert("Please select a file before clicking 'Load'");
-  }
-  else {
-    file = input.files[0];
-    fr = new FileReader();
-    fr.onload = receivedText;
-    fr.readAsText(file);
-  }
-
-  function receivedText(e, exportNetwork) {
-	    _nodes.clear();
-  _edges.clear();
-  network = null;
-    lines = e.target.result;
-    var Network = JSON.parse(lines);
+	//Take data from local storage
+	var retrievedData = JSON.parse(localStorage.getItem("data_temp"));
+	console.log(retrievedData)
+	//Use to load Network from local storage
+    var Network = retrievedData;
     _nodes.add(Network.nodes);
     _edges.add(Network.edges);
     var nodes = Network.nodes;
@@ -62,11 +31,8 @@ function loadFile(receivedText) {
       edges: _edges,
     };
     var network = new vis.Network(container, data, options);
-    console.log(edges)
-    // So this is callback??!
-    exportNetwork();
-    function exportNetwork() {
-      // onclick sucks Never use it effin again only jquery maste race!
+// File Reader (parser)
+
       $(document).ready(function(){
           $("#updater").on("click", function(){
                   // track coordinates
@@ -114,6 +80,9 @@ function loadFile(receivedText) {
     					edges: edges
     					};
               console.log(data)
+              // Use local storage to save Network
+			        localStorage.clear();
+              localStorage.setItem('data_temp', JSON.stringify(data));
               // Download updated JSON
               var json = JSON.stringify(data);
               // Use blob for big Networks
@@ -133,6 +102,61 @@ function loadFile(receivedText) {
                 }
               });
               });
-    			}
+function loadFile(receivedText) {
+      //Clear Network to load new one without buttons
+  _nodes.clear();
+  _edges.clear();
+  network.destroy();
+  network = null;
+
+
+  var input, file, fr;
+
+  if (typeof window.FileReader !== 'function') {
+    alert("The file API isn't supported on this browser yet.");
+    return;
+  }
+
+  input = document.getElementById('fileinput');
+  if (!input) {
+    alert("Um, couldn't find the fileinput element.");
+  }
+  else if (!input.files) {
+    alert("This browser doesn't seem to support the `files` property of file inputs.");
+  }
+  else if (!input.files[0]) {
+    alert("Please select a file before clicking 'Load'");
+  }
+  else {
+    file = input.files[0];
+    fr = new FileReader();
+    fr.onload = receivedText;
+    fr.readAsText(file);
+  }
+
+  function receivedText(e, exportNetwork) {
+    lines = e.target.result;
+    var Network = JSON.parse(lines);
+    _nodes.add(Network.nodes);
+    _edges.add(Network.edges);
+    var nodes = Network.nodes;
+    var edges = Network.edges;
+    var data = {
+      nodes: _nodes,
+      edges: _edges,
+    };
+    var network = new vis.Network(container, data, options);
+    console.log(edges)
+    // So this is callback??!
+	   					var data = {
+    					nodes: nodes,
+    					edges: edges
+    					};
+              console.log(data)
+              // Use local storage to save Network
+			  localStorage.clear();
+              localStorage.setItem('data_temp', JSON.stringify(data));
+      // dirty reload hack
+	  location.reload();
   }
 }
